@@ -37,6 +37,7 @@ export default function Signup({ setToken }) {
   const [jobId, setJobId] = useState('');
   const [jobStatus, setJobStatus] = useState('');
   const [error, setError] = useState('');
+  const [signupUserId, setSignupUserId] = useState('');
 
   // Onboarding Loader steps checklist
   const onboardingSteps = [
@@ -70,7 +71,7 @@ export default function Signup({ setToken }) {
             localStorage.setItem('email', email);
             localStorage.setItem('accountType', accountType);
             
-            setToken(`mock-user-${data.result?.userId || 'onboarded'}`);
+            setToken(`mock-user-${signupUserId || data.user_id || 'onboarded'}`);
             navigate('/');
           } else if (data.status === 'failed') {
             clearInterval(interval);
@@ -151,6 +152,7 @@ export default function Signup({ setToken }) {
         return setError(data.error || 'Signup failed.');
       }
 
+      setSignupUserId(data.userId);
       setJobId(data.jobId);
       setJobStatus('queued');
     } catch (err) {
