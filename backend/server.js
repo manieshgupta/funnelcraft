@@ -1027,4 +1027,14 @@ app.use((err, req, res, next) => {
 // Start Express Listener
 app.listen(PORT, () => {
   console.log(`[API Server] Express listening on http://localhost:${PORT}`);
+  
+  // Free tier cloud service optimization: Run worker in-process to avoid paid tiers
+  if (process.env.RUN_WORKER_IN_API === 'true' || process.env.NODE_ENV === 'production') {
+    console.log('[API Server] Starting background BullMQ worker in-process...');
+    try {
+      require('./worker');
+    } catch (workerErr) {
+      console.error('[API Server] Failed to initialize in-process background worker:', workerErr);
+    }
+  }
 });
