@@ -1,0 +1,39 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production builds
+frontend/dist/
+frontend/build/
+dist/
+build/
+
+# Local Environment and Secrets Configuration
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+
+# IDE & Editor folders
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Temp and System-Generated folders
+.gemini/
+.tempmediaStorage/
+.cache/
+tmp/
+temp/

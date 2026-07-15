@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Key Setup Guide - Funnelcraft</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              400: '#a855f7',
+              500: '#9d50bb',
+              600: '#8b5cf6',
+            },
+            cyan: {
+              400: '#22d3ee',
+              500: '#00d2ff',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+    }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: 0 10px 40px 0 rgba(157, 80, 187, 0.03);
+      position: relative;
+    }
+    .dark .glass-panel {
+      background: rgba(19, 19, 21, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.5);
+    }
+    .glass-panel::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.1) 100%);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+  </style>
+  <script>
+    // Sync theme with main app localStorage on load
+    (function() {
+      const theme = localStorage.getItem('theme') || 'dark';
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+</head>
+<body class="bg-slate-50 dark:bg-[#0a0a0c] text-slate-800 dark:text-slate-100 min-h-screen py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center relative overflow-x-hidden">
+  
+  <!-- Radial Glow Backgrounds -->
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-500/5 dark:bg-brand-500/12 blur-[100px] rounded-full pointer-events-none"></div>
+  <div class="absolute bottom-10 left-10 w-[300px] h-[300px] bg-cyan-500/5 dark:bg-cyan-500/10 blur-[90px] rounded-full pointer-events-none"></div>
+
+  <div class="w-full max-w-4xl space-y-8 relative z-10">
+    
+    <!-- Top Bar / Nav Header -->
+    <div class="flex justify-between items-center glass-panel rounded-2xl px-6 py-4">
+      <div class="flex items-center space-x-2.5">
+        <div class="p-2 rounded-xl bg-gradient-to-tr from-brand-600 to-violet-500 shadow-md shadow-brand-500/10">
+          <!-- Funnel / Filter Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-white"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        </div>
+        <span class="font-bold text-lg text-slate-900 dark:text-white tracking-tight">Funnelcraft</span>
+      </div>
+      <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">
+        Setup Resources
+      </div>
+    </div>
+
+    <!-- Header Description -->
+    <div class="text-center space-y-3 pt-4">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">API Key Generation Guide</h1>
+      <p class="text-slate-500 dark:text-slate-400 text-sm max-w-lg mx-auto leading-relaxed">
+        Funnelcraft operates on a secure **Bring Your Own Key (BYOK)** model. Follow the instructions below to get your AI API credentials.
+      </p>
+    </div>
+
+    <!-- Providers Grid -->
+    <div class="grid gap-6">
+
+      <!-- Google Gemini -->
+      <div class="glass-panel rounded-2xl p-6 md:p-8 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 dark:border-white/5 pb-4 gap-4">
+          <div class="flex items-center space-x-3">
+            <div class="p-3 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-orange-500 dark:text-orange-400 font-bold text-lg flex items-center justify-center w-12 h-12">
+              G
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 dark:text-white">Google Gemini API</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">High velocity and intelligence, recommended provider for fast drafts.</p>
+            </div>
+          </div>
+          <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold transition-all flex items-center space-x-1.5 self-start sm:self-center shadow-lg shadow-orange-600/15">
+            <span>Open Google AI Studio ↗</span>
+          </a>
+        </div>
+        
+        <div class="space-y-4 text-sm text-slate-655 dark:text-slate-300">
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-orange-400 shrink-0 mt-0.5">1</span>
+            <p class="leading-relaxed">Go to <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" class="text-orange-500 dark:text-orange-400 hover:underline font-bold">Google AI Studio</a> and log in using your Google account.</p>
+          </div>
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-orange-400 shrink-0 mt-0.5">2</span>
+            <p class="leading-relaxed">Click the **"Get API key"** button on the top left navigation sidebar, or go directly to <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-orange-500 dark:text-orange-400 hover:underline font-bold">https://aistudio.google.com/app/apikey</a>.</p>
+          </div>
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-orange-400 shrink-0 mt-0.5">3</span>
+            <p class="leading-relaxed">Click the **"Create API key"** button. Choose to bind your key to a Cloud project or create a default key.</p>
+          </div>
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-orange-400 shrink-0 mt-0.5">4</span>
+            <p class="leading-relaxed">Copy the API key generated (usually starts with `AIzaSy`) and paste it into the Funnelcraft signup screen.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- OpenRouter -->
+      <div class="glass-panel rounded-2xl p-6 md:p-8 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 dark:border-white/5 pb-4 gap-4">
+          <div class="flex items-center space-x-3">
+            <div class="p-3 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-500 dark:text-brand-400 font-bold text-lg flex items-center justify-center w-12 h-12">
+              O
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 dark:text-white">OpenRouter</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Access multiple open LLM architectures (like Llama-3) with free-tier access keys.</p>
+            </div>
+          </div>
+          <a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold transition-all flex items-center space-x-1.5 self-start sm:self-center shadow-lg shadow-brand-600/15">
+            <span>Open OpenRouter ↗</span>
+          </a>
+        </div>
+        
+        <div class="space-y-4 text-sm text-slate-655 dark:text-slate-300">
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-brand-400 shrink-0 mt-0.5">1</span>
+            <p class="leading-relaxed">Navigate to <a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer" class="text-brand-500 dark:text-brand-400 hover:underline font-bold">OpenRouter.ai</a> and create an account or sign in.</p>
+          </div>
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-brand-400 shrink-0 mt-0.5">2</span>
+            <p class="leading-relaxed">Click on your account profile avatar on the top-right and select **Keys**, or visit <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" class="text-brand-500 dark:text-brand-400 hover:underline font-bold">https://openrouter.ai/keys</a> directly.</p>
+          </div>
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-brand-400 shrink-0 mt-0.5">3</span>
+            <p class="leading-relaxed">Click the **"Create Key"** button. Name the key (e.g. `Funnelcraft`) and click generate.</p>
+          </div>
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-brand-400 shrink-0 mt-0.5">4</span>
+            <p class="leading-relaxed">Copy the secret key immediately (it starts with `sk-or-`). *Note: You will not be able to view this key again!*</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Groq -->
+      <div class="glass-panel rounded-2xl p-6 md:p-8 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 dark:border-white/5 pb-4 gap-4">
+          <div class="flex items-center space-x-3">
+            <div class="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-500 dark:text-cyan-400 font-bold text-lg flex items-center justify-center w-12 h-12">
+              GR
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 dark:text-white">Groq Cloud Console</h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Extreme speed execution of open model layers with standard free usage allowances.</p>
+            </div>
+          </div>
+          <a href="https://console.groq.com/" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold transition-all flex items-center space-x-1.5 self-start sm:self-center shadow-lg shadow-cyan-600/15">
+            <span>Open Groq Console ↗</span>
+          </a>
+        </div>
+        
+        <div class="space-y-4 text-sm text-slate-655 dark:text-slate-300">
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-cyan-400 shrink-0 mt-0.5">1</span>
+            <p class="leading-relaxed">Sign up or sign in at the <a href="https://console.groq.com/" target="_blank" rel="noopener noreferrer" class="text-cyan-500 dark:text-cyan-400 hover:underline font-bold">Groq Console</a>.</p>
+          </div>
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-cyan-400 shrink-0 mt-0.5">2</span>
+            <p class="leading-relaxed">Click on the **"API Keys"** item in the left menu, or go directly to <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" class="text-cyan-500 dark:text-cyan-400 hover:underline font-bold">https://console.groq.com/keys</a>.</p>
+          </div>
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-cyan-400 shrink-0 mt-0.5">3</span>
+            <p class="leading-relaxed">Click the **"Create API Key"** button. Label it (e.g. `Funnelcraft`) and submit.</p>
+          </div>
+          <div class="flex items-start space-x-3.5">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-slate-200 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-cyan-400 shrink-0 mt-0.5">4</span>
+            <p class="leading-relaxed">Copy the API key generated (it starts with `gsk_`) and save it in Funnelcraft.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Back footer -->
+    <div class="text-center pt-4">
+      <button onclick="window.close()" class="px-6 py-3 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-white/5 dark:hover:bg-white/10 text-xs font-bold border border-slate-300 dark:border-white/5 transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white shadow-sm">
+        Close Setup Guide
+      </button>
+    </div>
+  </div>
+</body>
+</html>
