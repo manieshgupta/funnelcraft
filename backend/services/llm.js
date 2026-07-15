@@ -2,7 +2,7 @@ const axios = require('axios');
 
 // Curated zero-cost fallback models per provider
 const FALLBACK_MODELS = {
-  openrouter: 'meta-llama/llama-3.3-70b-instruct:free',
+  openrouter: 'meta-llama/llama-3-8b-instruct:free',
   groq: 'llama-3.3-70b-versatile',
   gemini: 'gemini-1.5-flash' // Or gemini-2.5-flash / gemini-3.5-flash depending on API version
 };
@@ -24,6 +24,13 @@ async function callLLM({ provider, apiKey, modelSlug, messages, jsonMode = false
   const headers = {
     'Content-Type': 'application/json'
   };
+
+  // Map generic free auto-router slug to a reliable free model to prevent OpenRouter
+  // from incorrectly routing the request to safety/moderation-only models (like Nemotron Safety)
+  let activeModelSlug = modelSlug;
+  if (provider === 'openrouter' && (modelSlug === 'openrouter/free' || !modelSlug)) {
+    activeModelSlug = 'google/gemma-2-9b-it:free';
+  }
 
   // Configure endpoint and auth headers
   if (provider === 'openrouter') {
@@ -48,7 +55,7 @@ async function callLLM({ provider, apiKey, modelSlug, messages, jsonMode = false
     : messages;
 
   const requestBody = {
-    model: modelSlug,
+    model: activeModelSlug,
     messages: formattedMessages,
     temperature: 0.7
   };
