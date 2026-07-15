@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Lock, LogIn, Filter } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
 
 export default function Login({ setToken }) {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ export default function Login({ setToken }) {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(getApiUrl('/api/auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

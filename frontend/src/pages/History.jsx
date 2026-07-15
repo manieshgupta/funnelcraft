@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ContentCard from '../components/ContentCard';
 import Editor from '../components/Editor';
 import { Globe, MessageSquare, Twitter, Calendar, CheckCircle } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
 
 export default function History({ token }) {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function History({ token }) {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`http://localhost:5000/api/content/history?platform=${activeFilter}`, {
+      const response = await fetch(getApiUrl(`/api/content/history?platform=${activeFilter}`), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -40,7 +41,7 @@ export default function History({ token }) {
 
   const handleSaveDraft = async (id, updatedTitle, updatedBody) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/content/${id}`, {
+      const response = await fetch(getApiUrl(`/api/content/${id}`), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -66,7 +67,7 @@ export default function History({ token }) {
 
   const handleUpdateStatus = async (id, status) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/content/${id}/status`, {
+      const response = await fetch(getApiUrl(`/api/content/${id}/status`), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -98,7 +99,7 @@ export default function History({ token }) {
 
   const handleDeleteContent = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/content/${id}`, {
+      const response = await fetch(getApiUrl(`/api/content/${id}`), {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Loader from '../components/Loader';
 import { Building2, User, Key, Check, Info, FileText, ChevronRight, Filter } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
 
 export default function Signup({ setToken }) {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ export default function Signup({ setToken }) {
 
     const interval = setInterval(async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/jobs/${jobId}`, {
+        const response = await fetch(getApiUrl(`/api/jobs/${jobId}`), {
           headers: {
             'Authorization': `Bearer mock-user-signup`
           }
@@ -114,7 +115,7 @@ export default function Signup({ setToken }) {
       apiKey
     };
 
-    let url = 'http://localhost:5000/api/auth/signup/company';
+    let url = getApiUrl('/api/auth/signup/company');
     let body = {
       ...baseBody,
       companyName,
@@ -123,7 +124,7 @@ export default function Signup({ setToken }) {
     };
 
     if (accountType === 'personal') {
-      url = 'http://localhost:5000/api/auth/signup/personal';
+      url = getApiUrl('/api/auth/signup/personal');
       body = {
         ...baseBody,
         fullName,

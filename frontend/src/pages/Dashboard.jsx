@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Loader from '../components/Loader';
 import Editor from '../components/Editor';
 import { Globe, MessageSquare, Twitter, Compass, Sparkles, Send, FileText, CheckCircle } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
 
 export default function Dashboard({ token, user }) {
   const location = useLocation();
@@ -42,7 +43,7 @@ export default function Dashboard({ token, user }) {
 
     const interval = setInterval(async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/jobs/${runningJobId}`, {
+        const response = await fetch(getApiUrl(`/api/jobs/${runningJobId}`), {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const job = await response.json();
@@ -84,7 +85,7 @@ export default function Dashboard({ token, user }) {
 
   const fetchSuggestedTopics = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/blog/suggested-topics', {
+      const response = await fetch(getApiUrl('/api/blog/suggested-topics'), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -100,7 +101,7 @@ export default function Dashboard({ token, user }) {
     setError('');
     setIsRegeneratingPillars(true);
     try {
-      const response = await fetch('http://localhost:5000/api/blog/suggested-topics/regenerate', {
+      const response = await fetch(getApiUrl('/api/blog/suggested-topics/regenerate'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -127,7 +128,7 @@ export default function Dashboard({ token, user }) {
     setJobProgress('queued');
 
     try {
-      const response = await fetch('http://localhost:5000/api/blog/titles', {
+      const response = await fetch(getApiUrl('/api/blog/titles'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -150,7 +151,7 @@ export default function Dashboard({ token, user }) {
     setJobProgress('queued');
 
     try {
-      const response = await fetch('http://localhost:5000/api/blog/generate', {
+      const response = await fetch(getApiUrl('/api/blog/generate'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -173,7 +174,7 @@ export default function Dashboard({ token, user }) {
     setJobProgress('queued');
 
     try {
-      const response = await fetch('http://localhost:5000/api/linkedin/generate', {
+      const response = await fetch(getApiUrl('/api/linkedin/generate'), {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -192,7 +193,7 @@ export default function Dashboard({ token, user }) {
     setJobProgress('queued');
 
     try {
-      const response = await fetch('http://localhost:5000/api/twitter/generate', {
+      const response = await fetch(getApiUrl('/api/twitter/generate'), {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -215,7 +216,7 @@ export default function Dashboard({ token, user }) {
 
   const handleSaveDraft = async (id, updatedTitle, updatedBody) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/content/${id}`, {
+      const response = await fetch(getApiUrl(`/api/content/${id}`), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -239,7 +240,7 @@ export default function Dashboard({ token, user }) {
 
   const handleUpdateStatus = async (id, status) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/content/${id}/status`, {
+      const response = await fetch(getApiUrl(`/api/content/${id}/status`), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -260,7 +261,7 @@ export default function Dashboard({ token, user }) {
 
   const handleDeleteContent = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/content/${id}`, {
+      const response = await fetch(getApiUrl(`/api/content/${id}`), {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

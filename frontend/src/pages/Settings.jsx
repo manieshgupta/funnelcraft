@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Key, ShieldCheck, ShieldAlert, Cpu, Save, Trash2, Eye, EyeOff, Info } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
 
 const MODEL_LISTS = {
   openrouter: [
@@ -47,7 +48,7 @@ export default function Settings({ token }) {
 
   const fetchCredentials = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/settings/ai-credential', {
+      const response = await fetch(getApiUrl('/api/settings/ai-credential'), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -64,7 +65,7 @@ export default function Settings({ token }) {
 
   const fetchModelPreferences = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/settings/model-preferences', {
+      const response = await fetch(getApiUrl('/api/settings/model-preferences'), {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -83,7 +84,7 @@ export default function Settings({ token }) {
     setKeySuccess('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/settings/ai-credential', {
+      const response = await fetch(getApiUrl('/api/settings/ai-credential'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -112,7 +113,7 @@ export default function Settings({ token }) {
     setKeySuccess('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/settings/ai-credential', {
+      const response = await fetch(getApiUrl('/api/settings/ai-credential'), {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -130,7 +131,7 @@ export default function Settings({ token }) {
     setModelSuccess('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/settings/model-preferences', {
+      const response = await fetch(getApiUrl('/api/settings/model-preferences'), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
