@@ -2,18 +2,19 @@ const axios = require('axios');
 
 // Curated zero-cost fallback models per provider (used for paid/specific model fallbacks)
 const FALLBACK_MODELS = {
-  openrouter: 'meta-llama/llama-3-8b-instruct:free',
+  openrouter: 'meta-llama/llama-3.1-8b-instruct:free',
   groq: 'llama-3.3-70b-versatile',
   gemini: 'gemini-1.5-flash'
 };
 
-// Pool of stable free models on OpenRouter to cycle through if endpoints go offline
+// Pool of stable, active free models on OpenRouter to cycle through if endpoints go offline
 const FREE_MODELS_POOL = [
-  'google/gemma-2-9b-it:free',
-  'meta-llama/llama-3-8b-instruct:free',
+  'meta-llama/llama-3.1-8b-instruct:free',
   'meta-llama/llama-3.2-3b-instruct:free',
-  'mistralai/mistral-7b-instruct:free',
-  'qwen/qwen-2.5-7b-instruct:free'
+  'qwen/qwen-2.5-7b-instruct:free',
+  'google/gemma-2-9b-it:free',
+  'microsoft/phi-3-medium-128k-instruct:free',
+  'openchat/openchat-7b:free'
 ];
 
 /**
@@ -105,11 +106,12 @@ async function callLLM({ provider, apiKey, modelSlug, messages, jsonMode = false
     // Case A: Free model on OpenRouter has no active endpoints or has rate limits -> cycle to next free model in pool
     const isFreeOpenRouter = provider === 'openrouter' && (modelSlug === 'openrouter/free' || modelSlug.endsWith(':free'));
     
-    if (isFreeOpenRouter && attemptIndex < 3) {
+    if (isFreeOpenRouter && attemptIndex < 5) {
       const nextAttempt = attemptIndex + 1;
       const nextModel = FREE_MODELS_POOL[nextAttempt % FREE_MODELS_POOL.length];
-      console.warn(`[LLM Service] Free endpoint failed. Retrying (Attempt ${nextAttempt}/3) with next pool model: ${nextModel}...`);
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const waitTime = status === 429 ? 3000 : 1500;
+      console.warn(`[LLM Service] Free endpoint failed. Retrying (Attempt ${nextAttempt}/5) in ${waitTime}ms with next pool model: ${nextModel}...`);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
       return callLLM({
         provider,
         apiKey,
