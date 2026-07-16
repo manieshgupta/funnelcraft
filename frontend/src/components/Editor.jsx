@@ -4,6 +4,7 @@ import { Copy, Save, Check, X, Clipboard, ExternalLink, Globe, Trash2, RefreshCw
 export default function Editor({ item, onClose, onSave, onMarkPublished, onUpdateStatus, onDelete, onRegenerate }) {
   const [body, setBody] = useState(item.body);
   const [title, setTitle] = useState(item.title || '');
+  const [activePanel, setActivePanel] = useState('edit'); // 'edit' | 'preview'
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
@@ -103,23 +104,25 @@ export default function Editor({ item, onClose, onSave, onMarkPublished, onUpdat
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-5xl h-[85vh] glass-panel rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-950/60 backdrop-blur-sm animate-fade-in">
+      <div className="w-full max-w-5xl h-[92vh] sm:h-[85vh] glass-panel rounded-2xl shadow-2xl flex flex-col overflow-hidden">
         {/* Editor Toolbar */}
-        <div className="h-16 px-6 border-b border-slate-200 dark:border-white/5 bg-slate-100/50 dark:bg-slate-900/50 flex items-center justify-between relative">
-          <div className="flex items-center space-x-3">
-            <span className="px-2.5 py-0.5 rounded bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-bold uppercase tracking-wider">
+        <div className="h-auto md:h-16 px-4 py-3 sm:px-6 border-b border-slate-200 dark:border-white/5 bg-slate-100/50 dark:bg-slate-900/50 flex flex-col md:flex-row md:items-center justify-between gap-3 relative">
+          <div className="flex items-center space-x-2 sm:space-x-3 w-full md:w-auto">
+            <span className="px-2 py-0.5 rounded bg-brand-500/10 text-brand-600 dark:text-brand-400 text-[10px] sm:text-xs font-bold uppercase tracking-wider">
               {item.platform}
             </span>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="bg-transparent text-slate-900 dark:text-white font-bold text-lg focus:outline-none border-b border-transparent focus:border-brand-500/30 px-1 py-0.5 w-[180px] sm:w-[260px] md:w-[320px]"
+              className="bg-transparent text-slate-900 dark:text-white font-bold text-base sm:text-lg focus:outline-none border-b border-transparent focus:border-brand-500/30 px-1 py-0.5 flex-1 md:w-[320px]"
               placeholder="Draft Title"
             />
-          </div>          {saveMessage && (
-            <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-2 rounded-xl text-xs font-extrabold tracking-wide animate-fade-in z-10 shadow-2xl border ${
+          </div>
+
+          {saveMessage && (
+            <div className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1.5 rounded-xl text-[10px] sm:text-xs font-extrabold tracking-wide animate-fade-in z-10 shadow-2xl border ${
               saveMessage.includes('Failed')
                 ? 'bg-rose-600 text-white border-rose-500/30 shadow-rose-600/20'
                 : 'bg-emerald-600 text-white border-emerald-500/30 shadow-emerald-600/20'
@@ -128,33 +131,33 @@ export default function Editor({ item, onClose, onSave, onMarkPublished, onUpdat
             </div>
           )}
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-end space-x-1 sm:space-x-2 w-full md:w-auto">
             <button
               onClick={handleCopy}
-              className="p-2 h-fit self-center whitespace-nowrap rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-all flex items-center space-x-1.5 text-xs font-semibold"
+              className="p-2 h-fit rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-all flex items-center space-x-1 sm:space-x-1.5 text-xs font-semibold"
               title="Copy markdown to clipboard"
             >
               {copied ? <Check size={14} className="text-emerald-500 dark:text-emerald-400" /> : <Copy size={14} />}
-              <span>{copied ? 'Copied' : 'Copy'}</span>
+              <span className="hidden sm:inline">{copied ? 'Copied' : 'Copy'}</span>
             </button>
 
             <button
               onClick={handleSave}
               disabled={saving}
-              className="p-2 h-fit self-center whitespace-nowrap rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-all flex items-center space-x-1.5 text-xs font-semibold"
+              className="p-2 h-fit rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-all flex items-center space-x-1 sm:space-x-1.5 text-xs font-semibold"
             >
               <Save size={14} />
-              <span>{saving ? 'Saving...' : 'Save'}</span>
+              <span className="hidden sm:inline">{saving ? 'Saving...' : 'Save'}</span>
             </button>
 
             {item.platform === 'blog' && item.status !== 'marked_published' && onRegenerate && (
               <button
                 onClick={handleRegenerate}
-                className="p-2 h-fit self-center whitespace-nowrap rounded-lg bg-indigo-650 hover:bg-indigo-600 text-white transition-all flex items-center space-x-1.5 text-xs font-bold shadow-md shadow-indigo-650/15"
+                className="p-2 h-fit rounded-lg bg-indigo-650 hover:bg-indigo-600 text-white transition-all flex items-center space-x-1 sm:space-x-1.5 text-xs font-bold shadow-md shadow-indigo-650/15"
                 title="Regenerate Content"
               >
                 <RefreshCw size={14} />
-                <span>Regenerate</span>
+                <span className="hidden sm:inline">Regenerate</span>
               </button>
             )}
 
@@ -162,56 +165,80 @@ export default function Editor({ item, onClose, onSave, onMarkPublished, onUpdat
               <button
                 onClick={() => handleStatusTransition('marked_published')}
                 disabled={publishing}
-                className="p-2 h-fit self-center whitespace-nowrap rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-all flex items-center space-x-1.5 text-xs font-bold shadow-md shadow-emerald-600/10"
+                className="p-2 h-fit rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white transition-all flex items-center space-x-1 sm:space-x-1.5 text-xs font-bold shadow-md shadow-emerald-600/10"
               >
                 <Globe size={14} />
-                <span>{publishing ? 'Publishing...' : 'Mark Published'}</span>
+                <span className="hidden sm:inline">{publishing ? 'Publishing...' : 'Mark Published'}</span>
               </button>
             ) : (
               <button
                 onClick={() => handleStatusTransition('draft')}
                 disabled={publishing}
-                className="p-2 h-fit self-center whitespace-nowrap rounded-lg bg-amber-600 hover:bg-amber-500 text-white transition-all flex items-center space-x-1.5 text-xs font-bold shadow-md shadow-amber-600/10"
+                className="p-2 h-fit rounded-lg bg-amber-600 hover:bg-amber-500 text-white transition-all flex items-center space-x-1 sm:space-x-1.5 text-xs font-bold shadow-md shadow-amber-600/10"
               >
                 <EyeOff size={14} />
-                <span>{publishing ? 'Updating...' : 'Mark Unpublished'}</span>
+                <span className="hidden sm:inline">{publishing ? 'Updating...' : 'Mark Unpublished'}</span>
               </button>
             )}
 
             {onDelete && (
               <button
                 onClick={handleDelete}
-                className="p-2 h-fit self-center whitespace-nowrap rounded-lg bg-rose-600 hover:bg-rose-500 text-white transition-all flex items-center space-x-1.5 text-xs font-bold shadow-md shadow-rose-600/10"
+                className="p-2 h-fit rounded-lg bg-rose-600 hover:bg-rose-500 text-white transition-all flex items-center space-x-1 sm:space-x-1.5 text-xs font-bold shadow-md shadow-rose-600/10"
                 title="Delete content"
               >
                 <Trash2 size={14} />
-                <span>Delete</span>
+                <span className="hidden sm:inline">Delete</span>
               </button>
             )}
 
             <button
               onClick={onClose}
-              className="p-2 h-fit self-center whitespace-nowrap rounded-lg bg-slate-100 hover:bg-rose-500/20 hover:text-rose-600 dark:bg-white/5 dark:hover:bg-rose-500/20 dark:hover:text-rose-400 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-slate-400 transition-all"
+              className="p-2 h-fit rounded-lg bg-slate-100 hover:bg-rose-500/20 hover:text-rose-600 dark:bg-white/5 dark:hover:bg-rose-500/20 dark:hover:text-rose-400 border border-slate-200 dark:border-white/5 text-slate-500 dark:text-slate-400 transition-all"
             >
               <X size={15} />
             </button>
           </div>
         </div>
 
+        {/* Tab Toggle for mobile Edit vs Preview */}
+        <div className="md:hidden flex border-b border-slate-200 dark:border-white/5 bg-slate-50/50 dark:bg-slate-900/30">
+          <button
+            onClick={() => setActivePanel('edit')}
+            className={`flex-1 py-2.5 text-xs font-bold text-center border-b-2 transition-all ${
+              activePanel === 'edit'
+                ? 'border-brand-500 text-brand-600 dark:text-brand-400 bg-brand-500/5'
+                : 'border-transparent text-slate-550 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            Edit Draft
+          </button>
+          <button
+            onClick={() => setActivePanel('preview')}
+            className={`flex-1 py-2.5 text-xs font-bold text-center border-b-2 transition-all ${
+              activePanel === 'preview'
+                ? 'border-brand-500 text-brand-600 dark:text-brand-400 bg-brand-500/5'
+                : 'border-transparent text-slate-550 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            Preview Draft
+          </button>
+        </div>
+
         {/* Content Layout */}
-        <div className="flex-1 flex divide-x divide-slate-200 dark:divide-white/5 overflow-hidden">
+        <div className="flex-1 flex flex-col md:flex-row md:divide-x divide-slate-200 dark:divide-white/5 overflow-hidden">
           {/* Edit Panel */}
-          <div className="w-1/2 h-full flex flex-col">
+          <div className={`w-full md:w-1/2 h-full flex flex-col ${activePanel === 'edit' ? 'flex' : 'hidden md:flex'}`}>
             <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              className="flex-1 w-full h-full p-6 bg-slate-50/50 dark:bg-slate-950/20 text-slate-700 dark:text-slate-300 font-mono text-sm leading-relaxed resize-none focus:outline-none focus:bg-slate-100/50 dark:focus:bg-slate-950/40 transition-colors"
+              className="flex-1 w-full h-full p-4 sm:p-6 bg-slate-50/50 dark:bg-slate-950/20 text-slate-700 dark:text-slate-300 font-mono text-sm leading-relaxed resize-none focus:outline-none focus:bg-slate-100/50 dark:focus:bg-slate-950/40 transition-colors"
               placeholder="Write your draft in markdown..."
             />
           </div>
 
           {/* Preview Panel */}
-          <div className="w-1/2 h-full p-6 overflow-y-auto bg-slate-50/75 dark:bg-slate-950/40 prose dark:prose-invert max-w-none">
+          <div className={`w-full md:w-1/2 h-full p-4 sm:p-6 overflow-y-auto bg-slate-50/75 dark:bg-slate-950/40 prose dark:prose-invert max-w-none ${activePanel === 'preview' ? 'block' : 'hidden md:block'}`}>
             <div 
               dangerouslySetInnerHTML={{ __html: renderMarkdown(body) }} 
               className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed"

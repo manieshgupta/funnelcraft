@@ -92,6 +92,47 @@ export default function Navbar({ user, logout, theme, setTheme }) {
           )}
         </div>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      {user && (
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800/80 shadow-[0_-4px_12px_rgba(0,0,0,0.05)] dark:shadow-[0_-4px_12px_rgba(0,0,0,0.5)] px-6 py-2 h-16 flex items-center justify-around">
+          <Link
+            to="/"
+            className={`flex flex-col items-center justify-center space-y-1 text-[11px] font-medium transition-colors ${
+              isActive('/')
+                ? 'text-brand-600 dark:text-brand-400 font-semibold'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <Compass size={20} />
+            <span>Planner</span>
+          </Link>
+
+          <Link
+            to="/history"
+            className={`flex flex-col items-center justify-center space-y-1 text-[11px] font-medium transition-colors ${
+              isActive('/history')
+                ? 'text-brand-600 dark:text-brand-400 font-semibold'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <History size={20} />
+            <span>History</span>
+          </Link>
+
+          <Link
+            to="/settings"
+            className={`flex flex-col items-center justify-center space-y-1 text-[11px] font-medium transition-colors ${
+              isActive('/settings')
+                ? 'text-brand-600 dark:text-brand-400 font-semibold'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <SettingsIcon size={20} />
+            <span>Settings</span>
+          </Link>
+        </nav>
+      )}
     </header>
   );
 }

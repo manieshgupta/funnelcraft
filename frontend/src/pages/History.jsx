@@ -162,10 +162,10 @@ export default function History({ token }) {
         </div>
 
         {/* Tab Filters */}
-        <div className="flex space-x-1.5 p-1 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-white/5 self-start md:self-center">
+        <div className="w-full md:w-auto flex space-x-1 p-1 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-white/5 self-stretch md:self-center">
           <button
             onClick={() => setActiveFilter('blog')}
-            className={`flex items-center space-x-1 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 md:flex-initial flex items-center justify-center space-x-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeFilter === 'blog' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -174,7 +174,7 @@ export default function History({ token }) {
           </button>
           <button
             onClick={() => setActiveFilter('linkedin')}
-            className={`flex items-center space-x-1 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 md:flex-initial flex items-center justify-center space-x-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeFilter === 'linkedin' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -183,7 +183,7 @@ export default function History({ token }) {
           </button>
           <button
             onClick={() => setActiveFilter('twitter')}
-            className={`flex items-center space-x-1 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 md:flex-initial flex items-center justify-center space-x-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeFilter === 'twitter' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >

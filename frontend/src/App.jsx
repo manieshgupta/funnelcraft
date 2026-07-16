@@ -66,7 +66,7 @@ export default function App() {
     <Router>
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 bg-radial-glow flex flex-col transition-colors duration-300">
         <Navbar user={user} logout={logout} theme={theme} setTheme={setTheme} />
-        <main className="flex-1 container mx-auto px-4 py-8 max-w-6xl">
+        <main className="flex-1 container mx-auto px-4 py-8 pb-24 md:pb-8 max-w-6xl">
           <Routes>
             <Route path="/login" element={!token ? <Login setToken={setToken} /> : <Navigate to="/" />} />
             <Route path="/signup" element={!token ? <Signup setToken={setToken} /> : <Navigate to="/" />} />

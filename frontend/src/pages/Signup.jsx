@@ -197,7 +197,7 @@ export default function Signup({ setToken }) {
       {step === 1 ? (
         /* STEP 1: Selector */
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <button
               onClick={() => setAccountType('company')}
               className={`p-6 rounded-2xl border text-left flex flex-col justify-between h-44 transition-all duration-300 ${
@@ -256,7 +256,7 @@ export default function Signup({ setToken }) {
           </div>
 
           {/* Core Credentials */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Email</label>
               <input
@@ -295,7 +295,7 @@ export default function Signup({ setToken }) {
                   required
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Website URL</label>
                   <input
@@ -320,7 +320,7 @@ export default function Signup({ setToken }) {
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Full Name</label>
                   <input
@@ -344,7 +344,7 @@ export default function Signup({ setToken }) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">LinkedIn Profile URL</label>
                   <input
@@ -377,7 +377,7 @@ export default function Signup({ setToken }) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Target Audience</label>
                   <textarea
@@ -435,7 +435,7 @@ export default function Signup({ setToken }) {
               </a>
             </div>
             
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Select Provider</label>
                 <select
@@ -448,7 +448,7 @@ export default function Signup({ setToken }) {
                   <option value="gemini" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">Google Gemini</option>
                 </select>
               </div>
-              <div className="col-span-2">
+              <div className="col-span-1 sm:col-span-2">
                 <label className="block text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">AI API Key</label>
                 <input
                   type="password"

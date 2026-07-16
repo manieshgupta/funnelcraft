@@ -354,17 +354,17 @@ export default function Dashboard({ token, user }) {
             )}
 
             {/* Custom Input */}
-            <div className="flex items-center space-x-2 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch gap-2 pt-2">
               <input
                 type="text"
                 value={topicInput}
                 onChange={(e) => setTopicInput(e.target.value)}
-                className="flex-1 px-4 py-2.5 rounded-xl glass-input text-sm"
+                className="w-full sm:flex-1 px-4 py-2.5 rounded-xl glass-input text-sm"
                 placeholder="Or type a custom topic (e.g. Next.js performance optimizations)"
               />
               <button
                 onClick={() => handleSuggestTitles()}
-                className="flex items-center space-x-1.5 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-bold shadow-md shadow-brand-600/10 hover:shadow-brand-500/25 transition-all h-full"
+                className="flex items-center justify-center space-x-1.5 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-bold shadow-md shadow-brand-600/10 hover:shadow-brand-500/25 transition-all w-full sm:w-auto"
               >
                 <Send size={15} />
                 <span>Suggest</span>
@@ -508,10 +508,10 @@ export default function Dashboard({ token, user }) {
         </div>
 
         {/* Tab Selector */}
-        <div className="flex space-x-1.5 p-1 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-white/5 self-start md:self-center">
+        <div className="w-full md:w-auto flex space-x-1 p-1 rounded-xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-white/5 self-stretch md:self-center">
           <button
             onClick={() => setActiveTab('blog')}
-            className={`flex items-center space-x-1 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 md:flex-initial flex items-center justify-center space-x-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'blog' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -520,7 +520,7 @@ export default function Dashboard({ token, user }) {
           </button>
           <button
             onClick={() => setActiveTab('linkedin')}
-            className={`flex items-center space-x-1 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 md:flex-initial flex items-center justify-center space-x-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'linkedin' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
@@ -529,7 +529,7 @@ export default function Dashboard({ token, user }) {
           </button>
           <button
             onClick={() => setActiveTab('twitter')}
-            className={`flex items-center space-x-1 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 md:flex-initial flex items-center justify-center space-x-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               activeTab === 'twitter' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
