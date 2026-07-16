@@ -2,19 +2,19 @@ const axios = require('axios');
 
 // Curated zero-cost fallback models per provider (used for paid/specific model fallbacks)
 const FALLBACK_MODELS = {
-  openrouter: 'meta-llama/llama-3.1-8b-instruct:free',
+  openrouter: 'meta-llama/llama-3.3-70b-instruct:free',
   groq: 'llama-3.3-70b-versatile',
   gemini: 'gemini-1.5-flash'
 };
 
-// Pool of stable, active free models on OpenRouter to cycle through if endpoints go offline
+// Pool of stable, active free models on OpenRouter (queried live from OpenRouter catalog)
 const FREE_MODELS_POOL = [
-  'meta-llama/llama-3.1-8b-instruct:free',
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'google/gemma-4-31b-it:free',
   'meta-llama/llama-3.2-3b-instruct:free',
-  'qwen/qwen-2.5-7b-instruct:free',
-  'google/gemma-2-9b-it:free',
-  'microsoft/phi-3-medium-128k-instruct:free',
-  'openchat/openchat-7b:free'
+  'nousresearch/hermes-3-llama-3.1-405b:free',
+  'openai/gpt-oss-20b:free',
+  'cognitivecomputations/dolphin-mistral-24b-venice-edition:free'
 ];
 
 /**
