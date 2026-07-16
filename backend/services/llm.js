@@ -1,11 +1,20 @@
 const axios = require('axios');
 
-// Curated zero-cost fallback models per provider
+// Curated zero-cost fallback models per provider (used for paid/specific model fallbacks)
 const FALLBACK_MODELS = {
   openrouter: 'meta-llama/llama-3-8b-instruct:free',
   groq: 'llama-3.3-70b-versatile',
-  gemini: 'gemini-1.5-flash' // Or gemini-2.5-flash / gemini-3.5-flash depending on API version
+  gemini: 'gemini-1.5-flash'
 };
+
+// Pool of stable free models on OpenRouter to cycle through if endpoints go offline
+const FREE_MODELS_POOL = [
+  'google/gemma-2-9b-it:free',
+  'meta-llama/llama-3-8b-instruct:free',
+  'meta-llama/llama-3.2-3b-instruct:free',
+  'mistralai/mistral-7b-instruct:free',
+  'qwen/qwen-2.5-7b-instruct:free'
+];
 
 /**
  * Call the swappable OpenAI-compatible LLM provider with fallback handling.
@@ -16,20 +25,21 @@ const FALLBACK_MODELS = {
  * @param {string} options.modelSlug - The preferred model slug
  * @param {Array<Object>|string} options.messages - String prompt or array of message objects
  * @param {boolean} [options.jsonMode=false] - Whether to request structured JSON output
- * @param {boolean} [options.isRetry=false] - Tracker for recursive fallback retry
+ * @param {number} [options.attemptIndex=0] - Tracker for cascading retry attempts
  * @returns {Promise<string>} - The LLM text response
  */
-async function callLLM({ provider, apiKey, modelSlug, messages, jsonMode = false, isRetry = false }) {
+async function callLLM({ provider, apiKey, modelSlug, messages, jsonMode = false, attemptIndex = 0 }) {
   let baseURL = '';
   const headers = {
     'Content-Type': 'application/json'
   };
 
-  // Map generic free auto-router slug to a reliable free model to prevent OpenRouter
-  // from incorrectly routing the request to safety/moderation-only models (like Nemotron Safety)
+  // Map generic free auto-router slug to the active model from our free models pool
   let activeModelSlug = modelSlug;
-  if (provider === 'openrouter' && (modelSlug === 'openrouter/free' || !modelSlug)) {
-    activeModelSlug = 'google/gemma-2-9b-it:free';
+  if (provider === 'openrouter') {
+    if (modelSlug === 'openrouter/free' || !modelSlug) {
+      activeModelSlug = FREE_MODELS_POOL[attemptIndex % FREE_MODELS_POOL.length];
+    }
   }
 
   // Configure endpoint and auth headers
@@ -77,7 +87,7 @@ async function callLLM({ provider, apiKey, modelSlug, messages, jsonMode = false
   }
 
   try {
-    console.log(`[LLM Service] Requesting ${provider} (Model: ${modelSlug}, JSON: ${jsonMode})`);
+    console.log(`[LLM Service] Requesting ${provider} (Model: ${activeModelSlug}, Attempt: ${attemptIndex}, JSON: ${jsonMode})`);
     const response = await axios.post(baseURL, requestBody, { headers, timeout: 60000 });
     
     const content = response.data?.choices?.[0]?.message?.content;
@@ -90,19 +100,32 @@ async function callLLM({ provider, apiKey, modelSlug, messages, jsonMode = false
     const errorData = error.response?.data;
     const errorMessage = errorData?.error?.message || error.message;
 
-    console.error(`[LLM Service] Error from ${provider} (${modelSlug}): status=${status}, message=${errorMessage}`);
+    console.error(`[LLM Service] Error from ${provider} (${activeModelSlug}): status=${status}, message=${errorMessage}`);
 
-    // If it's already a retry, fail immediately
-    if (isRetry) {
-      throw new Error(`Primary and fallback LLM requests both failed. Error: ${errorMessage}`);
+    // Case A: Free model on OpenRouter has no active endpoints or has rate limits -> cycle to next free model in pool
+    const isFreeOpenRouter = provider === 'openrouter' && (modelSlug === 'openrouter/free' || modelSlug.endsWith(':free'));
+    
+    if (isFreeOpenRouter && attemptIndex < 3) {
+      const nextAttempt = attemptIndex + 1;
+      const nextModel = FREE_MODELS_POOL[nextAttempt % FREE_MODELS_POOL.length];
+      console.warn(`[LLM Service] Free endpoint failed. Retrying (Attempt ${nextAttempt}/3) with next pool model: ${nextModel}...`);
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      return callLLM({
+        provider,
+        apiKey,
+        modelSlug, // Keep original slug so it retrieves the next index in the pool recursively
+        messages,
+        jsonMode,
+        attemptIndex: nextAttempt
+      });
     }
 
-    // Trigger fallback retry on Rate Limit (429) or Bad Request/Model Deprecation (400/404)
+    // Case B: Paid / specific model failed -> try the default fallback model once
     const isRateLimit = status === 429;
     const isModelError = status === 400 || status === 404;
     const isDeprecation = errorMessage.toLowerCase().includes('deprecat') || errorMessage.toLowerCase().includes('model not found') || errorMessage.toLowerCase().includes('unknown model');
 
-    if (isRateLimit || isModelError || isDeprecation) {
+    if (attemptIndex === 0 && (isRateLimit || isModelError || isDeprecation)) {
       const fallbackModel = FALLBACK_MODELS[provider];
       if (fallbackModel && fallbackModel !== modelSlug) {
         console.warn(`[LLM Service] Rate limit/error hit. Sleeping 2 seconds before retrying with fallback model: ${fallbackModel}...`);
@@ -113,13 +136,13 @@ async function callLLM({ provider, apiKey, modelSlug, messages, jsonMode = false
           modelSlug: fallbackModel,
           messages,
           jsonMode,
-          isRetry: true
+          attemptIndex: 1
         });
       }
     }
 
-    // Pass through other errors
-    throw error;
+    // Pass through errors if all attempts are exhausted
+    throw new Error(`LLM request failed (attempts exhausted). Error: ${errorMessage}`);
   }
 }
 
